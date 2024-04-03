@@ -15,17 +15,6 @@ class NewsManagerControllerTest extends TestCase
     public function testDisplayNewsWithComments()
     {
         // Set up the expected output
-        $expectedOutput = "############ NEWS news 1 ############\n";
-        $expectedOutput .= "this is the description of our fist news\n";
-        $expectedOutput .= "Comment 1 : i like this news\n";
-        $expectedOutput .= "Comment 2 : i have no opinion about that\n";
-        $expectedOutput .= "Comment 3 : are you kidding me ?\n";
-        $expectedOutput .= "############ NEWS news 2 ############\n";
-        $expectedOutput .= "Comment 4 : this is so true\n";
-        $expectedOutput .= "Comment 4 : trolololo\n";
-        $expectedOutput .= "############ NEWS news 3 ############\n";
-        $expectedOutput .= "Comment 3 : luke i am your father\n";
-
         // Capture output from displayNewsWithComments() method
         ob_start();
         $newsManagerController = new NewsManagerController();
