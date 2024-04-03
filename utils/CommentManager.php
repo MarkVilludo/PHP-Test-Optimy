@@ -6,21 +6,22 @@ class CommentManager
 
     private function __construct()
     {
-        require_once(ROOT . '/utils/DB.php'); // Include DB utility class
-        require_once(ROOT . '/class/Comment.php'); // Include Comment class
+        include_once ROOT . '/utils/DB.php'; // Include DB utility class
+        include_once ROOT . '/class/Comment.php'; // Include Comment class
     }
 
     public static function getInstance()
     {
         if (null === self::$instance) {
             $c = __CLASS__;
-            self::$instance = new $c;
+            self::$instance = new $c();
         }
         return self::$instance;
     }
 
     /**
      * Retrieves all comments from the database.
+     *
      * @return array Array of Comment objects.
      */
     public function listComments()
@@ -43,21 +44,24 @@ class CommentManager
 
     /**
      * Adds a comment for a specific news item.
-     * @param string $body The body of the comment.
-     * @param int $newsId The ID of the news item the comment is for.
+     *
+     * @param  string $body   The body of the comment.
+     * @param  int    $newsId The ID of the news item the comment is for.
      * @return int The ID of the inserted comment.
      */
     public function addCommentForNews($body, $newsId)
     {
         $db = DB::getInstance(); // Get database instance
-        $sql = "INSERT INTO `comment` (`body`, `created_at`, `news_id`) VALUES('". $body . "','" . date('Y-m-d') . "','" . $newsId . "')"; // SQL query to insert a comment
+        $sql = "INSERT INTO `comment` (`body`, `created_at`, `news_id`) 
+		VALUES('" . $body . "','" . date('Y-m-d') . "','" . $newsId . "')"; // SQL query to insert a comment
         $db->exec($sql); // Execute the SQL query
-        return $db->lastInsertId($sql); // Return the ID of the inserted comment
+        return $db->lastInsertId(); // Return the ID of the inserted comment
     }
 
     /**
      * Deletes a comment by its ID.
-     * @param int $id The ID of the comment to delete.
+     *
+     * @param  int $id The ID of the comment to delete.
      * @return int The number of affected rows.
      */
     public function deleteComment($id)
@@ -69,7 +73,8 @@ class CommentManager
 
     /**
      * Delete multiple comments by their IDs.
-     * @param array $ids An array of comment IDs to delete.
+     *
+     * @param  array $ids An array of comment IDs to delete.
      * @return int The number of affected rows.
      */
     public function deleteMultipleComments($ids)
@@ -77,6 +82,6 @@ class CommentManager
         $db = DB::getInstance();
         $placeholders = rtrim(str_repeat('?,', count($ids)), ','); // placeholders for prepared statement
         $sql = "DELETE FROM `comment` WHERE `id` IN ($placeholders)"; // SQL query to delete multiple comments by IDs
-        return $db->exec($sql, $ids); // Execute the SQL query with prepared statement and return the number of affected rows
+        return $db->exec($sql); // Execute the SQL query with prepared statement and return the number of affected rows
     }
 }
